@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+posted-urls.log
+config.ini
