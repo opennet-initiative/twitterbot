@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Get RSS feed items from http://example.net/feed/ and post tweets to @youraccount.
@@ -13,20 +13,27 @@ import time
 import datetime
 import feedparser
 from datetime import date
+import html2text
+import configparser
 
-# Settings for the application.
-class Settings:
-	FeedUrl = "http://example.net/feed/"			# RSS feed to read and post tweets from.
-	PostedUrlsOutputFile = "posted-urls.log"		# Log file to save all tweeted RSS links (one URL per line).
-	PostedRetweetsOutputFile = "posted-retweets.log"	# Log file to save all retweeted tweets (one tweetid per line).
+# Read settings
+def getConfigValue(key):
+	config = configparser.ConfigParser(interpolation=None)
+	try:
+		config.read("config.ini")
 
-# Twitter authentication settings. Create a Twitter app at https://apps.twitter.com/ and
-# generate key, secret etc, and insert them below.
-class TwitterAuth:
-	ConsumerKey = "XXX"
-	ConsumerSecret = "XXX"
-	AccessToken = "XXX"
-	AccessTokenSecret = "XXX"
+		configDict = {
+			"FeedUrl": config['Settings']['FeedUrl'],
+			"PostedUrlsOutputFile": config['Settings']['PostedUrlsOutputFile'],
+			"PostedRetweetsOutputFile": config['Settings']['PostedRetweetsOutputFile'],
+			"ConsumerKey": config['TwitterAuth']['ConsumerKey'],
+			"ConsumerSecret": config['TwitterAuth']['ConsumerSecret'],
+			"AccessToken": config['TwitterAuth']['AccessToken'],
+			"AccessTokenSecret": config['TwitterAuth']['AccessTokenSecret']
+		}
+		return configDict.get(key)
+	except KeyError as e:
+		print("Error: Cannot read key '"+key+"' from file 'config.ini'")
 
 # Post tweet to account.
 def PostTweet(title, link):
@@ -35,7 +42,8 @@ def PostTweet(title, link):
 	message = title + " " + link
 	try:
 		# Tweet message.
-		twitter = Twython(TwitterAuth.ConsumerKey, TwitterAuth.ConsumerSecret, TwitterAuth.AccessToken, TwitterAuth.AccessTokenSecret) # Connect to Twitter.
+		twitter = Twython(getConfigValue("ConsumerKey"), getConfigValue("ConsumerSecret"),
+			getConfigValue("AccessToken"), getConfigValue("AccessTokenSecret")) # Connect to Twitter.
 		twitter.update_status(status = message)
 	except TwythonError as e:
 		print(e)
@@ -46,19 +54,63 @@ def ReadRssAndTweet(url):
 	for item in feed["items"]:
 		title = item["title"]
 		link = item["link"]
+		desc = item["description"]
+		h = html2text.HTML2Text()
+		h.ignore_links = True #do not post inline links
+		text = h.handle(desc)
+
+		#Hinweis: die Reihenfolge der folgenden Regeln sollte nicht verändert werden, es sei denn, du weißt was du tust!
+
+		text = text.replace("## Inhaltsverzeichnis","")
+		text = re.sub(r'\n(\s)+', r'\n', text, flags=re.MULTILINE) # keine freien Zeilen auch keine mit Leerzeichen anstatt nur CR
+
+		#keine Formatierungszeichen
+		#vorher:  "###  Montagstreffen (24.07.2017)"
+		#nachher: "Montagstreffen (24.07.2017)"
+		text = re.sub(r'^##+  ', r'', text, flags=re.MULTILINE)
+
+		#vorher:  "  * [1 Montagstreffen (13.11.2017)]"
+		#nachher: "[1 Montagstreffen (13.11.2017)]""
+		text = re.sub(r'^ +\*\s\[', r'[', text, flags=re.MULTILINE)
+
+		#vorher:  "* 1 Montagstreffen (13.11.2017)"
+		#vorher:  "	* 1.1 Borwinschule"
+		#nachher: "1 Montagstreffen (13.11.2017)"
+		#nachher: "1.1 Borwinschule"
+		text = re.sub(r'^ *\*\s(\d)', r'\1', text, flags=re.MULTILINE)
+
+		#vorher:  "  * letzte Verfeinerungen"
+		#nachher: "* letzte Verfeinerungen"
+		text = re.sub(r'^  \* ', r'* ', text, flags=re.MULTILINE)
+
+		text = text.replace("\n\n","\n") #keine freien Zeilen
+
+		''' TODO
+		#suche erstes Bild aus Text
+		#z.B. "(https://wiki.opennet-initiative.de/wiki/Datei:Oni-usb-rs232.jpg)"
+
+		search_resultsphoto = open('/path/to/file/image.jpg', 'rb')
+		response = twitter.upload_media(media=photo)
+		twitter.update_status(status='Checkout this cool image!', media_ids=[response['media_id']])
+		'''
+
+		text = "#Opennet Blog: "+text #start text with
+
+		#print(text) #for DEBUG
+
 		# Make sure we don't post any dubplicates.
 		if not (IsUrlAlreadyPosted(link)):
-			PostTweet(title, link)
+			PostTweet(text, link)
 			MarkUrlAsPosted(link)
 			print("Posted: " + link)
 		else:
 			print("Already posted: " + link)
-			
-# Has the URL already been posted? 
+
+# Has the URL already been posted?
 def IsUrlAlreadyPosted(url):
-	if os.path.isfile(Settings.PostedUrlsOutputFile):
+	if os.path.isfile(getConfigValue("PostedUrlsOutputFile")):
 		# Check whether URL is in log file.
-		f = open(Settings.PostedUrlsOutputFile)
+		f = open(getConfigValue("PostedUrlsOutputFile"))
 		posted_urls = f.readlines()
 		f.close()
 		if (url + "\n" or url) in posted_urls:
@@ -72,7 +124,7 @@ def IsUrlAlreadyPosted(url):
 def MarkUrlAsPosted(url):
 	try:
 		# Write URL to log file.
-		f = open(Settings.PostedUrlsOutputFile, "a")
+		f = open(getConfigValue("PostedUrlsOutputFile"), "a")
 		f.write(url + "\n")
 		f.close()
 	except:
@@ -89,7 +141,8 @@ def SearchAndRetweet():
 	keywords = filter + blacklist
 
 	# Connect to Twitter.
-	twitter = Twython(TwitterAuth.ConsumerKey, TwitterAuth.ConsumerSecret, TwitterAuth.AccessToken, TwitterAuth.AccessTokenSecret)
+	twitter = Twython(getConfigValue("ConsumerKey"), getConfigValue("ConsumerSecret"),
+		getConfigValue("AccessToken"), getConfigValue("AccessTokenSecret"))
 	search_results = twitter.search(q=keywords, count=10)
 	try:
 		for tweet in search_results["statuses"]:
@@ -106,11 +159,11 @@ def SearchAndRetweet():
 	except TwythonError as e:
 		print(e)
 
-# Has the tweet already been retweeted? 
+# Has the tweet already been retweeted?
 def IsTweetAlreadyRetweeted(tweetid):
-	if os.path.isfile(Settings.PostedRetweetsOutputFile):
+	if os.path.isfile(getConfigValue("getPostedRetweetsOutputFile")):
 		# Check whether tweet IDs is in log file.
-		f = open(Settings.PostedRetweetsOutputFile)
+		f = open(getConfigValue("PostedRetweetsOutputFile"))
 		posted_tweets = f.readlines()
 		f.close()
 		if (tweetid + "\n" or tweetid) in posted_tweets:
@@ -124,7 +177,7 @@ def IsTweetAlreadyRetweeted(tweetid):
 def MarkTweetAsRetweeted(tweetid):
 	try:
 		# Write tweet ID to log file.
-		f = open(Settings.PostedRetweetsOutputFile, "a")
+		f = open(getConfigValue("PostedRetweetsOutputFile"), "a")
 		f.write(tweetid + "\n")
 		f.close()
 	except:
@@ -145,9 +198,10 @@ if (__name__ == "__main__"):
 	if len(sys.argv) > 1:
 		cmd = sys.argv[1]
 		if (cmd == "rss"):
-			ReadRssAndTweet(Settings.FeedUrl)
+			ReadRssAndTweet(getConfigValue("FeedUrl"))
 		elif (cmd == "rt"):
-			SearchAndRetweet()
+			#SearchAndRetweet()
+			print("Feature deactivated!")
 		else:
 			DisplayHelp()
 	else:
