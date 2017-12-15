@@ -1,0 +1,14 @@
+Source: on-twitterbot
+Section: net
+Priority: optional
+Maintainer: Mathias Mahnke <ap27@opennet-initiative.de>
+Standards-Version: 4.0.0
+Homepage: https://opennet-initiative.de/wiki/Twitter
+Vcs-Git: https://dev.opennet-initiative.de/git/on_twitterbot.git
+Vcs-Browser: http://dev.opennet-initiative.de/browser/on_twitterbot
+
+Package: on-twitterbot
+Architecture: all
+Depends: python3-feedparser, python3-twythoni, python3-html2text, ${misc:Depends}
+Description: Twitterbot for the "Opennet Initiative".
+ Provide automatic twitter export function for Opennet Blog.
