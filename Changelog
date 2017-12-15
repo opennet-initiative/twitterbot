@@ -1,0 +1,4 @@
+Version 1.0.0 - 2017-12-15
+* Initial release based on the github.com/peterdalle/twitterbot project
+* Adoption for Opennet Blog Feed (RSS) specific demands
+* Debian Package creation added
