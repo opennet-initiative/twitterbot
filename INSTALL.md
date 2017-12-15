@@ -1,13 +1,11 @@
 # Manual Installation
  * install required python libs:
    sudo aptitude install python3-feedparser python3-twython python3-html2text
- * configure twitter API keys
-   see file config.ini
-
-# Run Application
- * configure twitterbot
+ * configure twitterbot twitter API keys
    mv config.ini.template config.ini
    Insert the needed values. See below.
+
+# Run Application
  * start application (foreground, once)
    python3 twitterbot.py rss
 
@@ -21,15 +19,16 @@
  * configure twitterbot
    cd /usr/share/on-twitterbot; mv config.ini.template config.ini
    Insert the needed values. See below.
+ * application will be regulary started based on cron job
 
 # Generate Twitter key and access token
  * goto https://apps.twitter.com/
  * use "create new app"
- ** Name: Twitterbot
- ** Description: RSS2Twitter Converter
- ** Website: https://www.opennet-initaitive.de
+   Name: Twitterbot
+   Description: RSS2Twitter Converter
+   Website: https://www.opennet-initaitive.de
  * Store 'Comsumer Key'
- * Store 'Consumer Secret' (via tab 'Keys and Access Tockens')
+ * Store 'Consumer Secret' (via tab 'Keys and Access Tokens')
  * use "create my access tocken"
  * Store 'Access Token'
  * Store 'Access Token Secret'
