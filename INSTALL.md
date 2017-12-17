@@ -1,6 +1,6 @@
 # Manual Installation
  * install required python libs:
-   sudo aptitude install python3-feedparser python3-twython python3-html2text
+   (sudo) apt install python3-feedparser python3-twython python3-html2text
  * configure twitterbot twitter API keys
    mv config.ini.template config.ini
    Insert the needed values. See below.
