@@ -12,10 +12,14 @@
 # Debian Installation
  * create DEB file
    make dist-deb
- * upload DEB file to repository
-   make upload-deb
- * install DEB file from repository on host
-   This includes creating a user, placing the executable, config and adding a cron job.
+ * upload and install DEB file on host
+   make upload-deb ..
+ * or use manual installation
+   cd tmp
+   wget https://downloads.opennet-initiative.de/debian/on-twitterbot_<version>_all.deb
+   apt -f install ./on-twitterbot_<version>_all.deb 
+ * install includes creating a user, placing the executable, 
+   placing an template config file and adding a cron job.
  * configure twitterbot
    cd /usr/share/on-twitterbot; mv config.ini.template config.ini
    Insert the needed values. See below.
