@@ -1,3 +1,6 @@
+Version 1.0.1 - 2017-12-18
+* Logging changes: write error messages to stderr
+
 Version 1.0.0 - 2017-12-15
 * Initial release based on the github.com/peterdalle/twitterbot project
 * Adoption for Opennet Blog Feed (RSS) specific demands

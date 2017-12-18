@@ -4,6 +4,11 @@
 # Get RSS feed items from http://example.net/feed/ and post tweets to @youraccount.
 # By Peter M. Dahlgren, @peterdalle
 
+# adopted by Opennet Initiative e.V. - https://www.opennet-initiative.de/
+# Martin Garbe <monomartin@opennet-initiative.de> 
+# Mathias Mahnke <ap27@opennet-initiative.de>
+# last update 2017/12/18
+
 from twython import Twython, TwythonError
 import csv
 import sys
@@ -33,7 +38,7 @@ def getConfigValue(key):
 		}
 		return configDict.get(key)
 	except KeyError as e:
-		print("Error: Cannot read key '"+key+"' from file 'config.ini'")
+		print("Error: Cannot read key '"+key+"' from file 'config.ini'", file=sys.stderr)
 
 # Post tweet to account.
 def PostTweet(title, link):
@@ -46,7 +51,7 @@ def PostTweet(title, link):
 			getConfigValue("AccessToken"), getConfigValue("AccessTokenSecret")) # Connect to Twitter.
 		twitter.update_status(status = message)
 	except TwythonError as e:
-		print(e)
+		print(e, file=sys.stderr)
 
 # Read RSS and post tweet.
 def ReadRssAndTweet(url):
@@ -153,11 +158,11 @@ def SearchAndRetweet():
 					MarkTweetAsRetweeted(tweet["id_str"])
 					print("Retweeted " + tweet["text"].encode("utf-8") + " (tweetid " + str(tweet["id_str"]) + ")")
 				except TwythonError as e:
-					print(e)
+					print(e, file=sys.stderr)
 			else:
 				print("Already retweeted " + tweet["text"].encode("utf-8") + " (tweetid " + str(tweet["id_str"]) + ")")
 	except TwythonError as e:
-		print(e)
+		print(e, file=sys.stderr)
 
 # Has the tweet already been retweeted?
 def IsTweetAlreadyRetweeted(tweetid):
@@ -201,7 +206,7 @@ if (__name__ == "__main__"):
 			ReadRssAndTweet(getConfigValue("FeedUrl"))
 		elif (cmd == "rt"):
 			#SearchAndRetweet()
-			print("Feature deactivated!")
+			print("Retweet feature deactivated!")
 		else:
 			DisplayHelp()
 	else:
