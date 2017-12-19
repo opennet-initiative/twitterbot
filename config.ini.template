@@ -1,6 +1,12 @@
 [Settings]
-#RSS Feed Url
+# RSS Feed Url
 FeedUrl = https://wiki.opennet-initiative.de/wiki/Spezial:BlogFeed/format%3Drss
+
+# Tweet Start (Text to insert at beginning of each tweet)
+TweetStart = "#Opennnet Blog:"
+
+# Tweet End (Test to add the the end of each tweet)
+TweetEnd = "#freifunk"
 
 # Log file to save all tweeted RSS links (one URL per line).
 PostedUrlsOutputFile = posted-urls.log

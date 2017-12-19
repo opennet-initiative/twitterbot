@@ -29,6 +29,8 @@ def getConfigValue(key):
 
 		configDict = {
 			"FeedUrl": config['Settings']['FeedUrl'],
+			"TweetStart": config['Settings']['TweetStart'],
+			"TweetEnd": config['Settings']['TweetEnd'],
 			"PostedUrlsOutputFile": config['Settings']['PostedUrlsOutputFile'],
 			"PostedRetweetsOutputFile": config['Settings']['PostedRetweetsOutputFile'],
 			"ConsumerKey": config['TwitterAuth']['ConsumerKey'],
@@ -99,7 +101,7 @@ def ReadRssAndTweet(url):
 		twitter.update_status(status='Checkout this cool image!', media_ids=[response['media_id']])
 		'''
 
-		text = "#Opennet Blog: "+text #start text with
+		text = getConfigValue("TweetStart") + " " + text + " " + getConfigValue("TweetEnd")
 
 		#print(text) #for DEBUG
 
