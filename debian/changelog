@@ -3,7 +3,7 @@ on-twitterbot (1.0.2-1) unstable; urgency=medium
   * Added copyright file
   * Depend on adduser, python3
 
- -- Mathias Mahnke <ap27@opennet-initiative.de>  Mon, 18 Dec 2017 21:11:00 +0100
+ -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Mon, 18 Dec 2017 21:11:00 +0100
 
 on-twitterbot (1.0.1-0) unstable; urgency=medium
   
