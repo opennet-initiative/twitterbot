@@ -1,6 +1,6 @@
 on-twitterbot (1.0.3-1) unstable; urgency=medium
 
- * Removed INSTALL.md from debing packaging
+  * Removed INSTALL.md from debian packaging
 
  -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Tue, 19 Dec 2017 09:55:00 +0100
 
