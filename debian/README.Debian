@@ -1,4 +1,20 @@
 This package provides the Opennet adoption if the Twitterbot python project.
 
 Configuration:
-* adjust the config.ini
+ * configure twitterbot
+   cd /usr/share/on-twitterbot; mv config.ini.template config.ini
+   Insert the needed values. See below.
+ * application will be regulary started based on cron job
+
+Generate Twitter key and access token:
+ * goto https://apps.twitter.com/
+ * use "create new app"
+   Name: Twitterbot
+   Description: RSS2Twitter Converter
+   Website: https://www.opennet-initaitive.de
+ * Store 'Comsumer Key'
+ * Store 'Consumer Secret' (via tab 'Keys and Access Tokens')
+ * use "create my access tocken"
+ * Store 'Access Token'
+ * Store 'Access Token Secret'
+ * insert all data into twitterbot config.ini

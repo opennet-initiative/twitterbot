@@ -1,3 +1,9 @@
+on-twitterbot (1.0.3-1) unstable; urgency=medium
+
+ * Removed INSTALL.md from debing packaging
+
+ -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Tue, 19 Dec 2017 09:55:00 +0100
+
 on-twitterbot (1.0.2-1) unstable; urgency=medium
   
   * Added copyright file
@@ -9,10 +15,10 @@ on-twitterbot (1.0.1-0) unstable; urgency=medium
   
   * Improved logging: write error messages to stderr
 
- -- Mathias Mahnke <ap27@opennet-initiative.de>  Mon, 18 Dec 2017 11:07:00 +0100
+ -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Mon, 18 Dec 2017 11:07:00 +0100
 
 on-twitterbot (1.0.0-1) unstable; urgency=medium
 
   * Initial release.
 
- -- Mathias Mahnke <ap27@opennet-initiative.de>  Fri, 15 Dec 2017 11:41:00 +0100
+ -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Fri, 15 Dec 2017 11:41:00 +0100
