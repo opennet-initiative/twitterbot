@@ -26,7 +26,6 @@ def getConfigValue(key):
 	config = configparser.ConfigParser(interpolation=None)
 	try:
 		config.read("config.ini")
-
 		configDict = {
 			"FeedUrl": config['Settings']['FeedUrl'],
 			"TweetStart": config['Settings']['TweetStart'],
@@ -50,7 +49,8 @@ def PostTweet(title, link):
 	try:
 		# Tweet message.
 		twitter = Twython(getConfigValue("ConsumerKey"), getConfigValue("ConsumerSecret"),
-			getConfigValue("AccessToken"), getConfigValue("AccessTokenSecret")) # Connect to Twitter.
+			getConfigValue("AccessToken"), getConfigValue("AccessTokenSecret")) 
+		# Connect to Twitter.
 		twitter.update_status(status = message)
 	except TwythonError as e:
 		print(e, file=sys.stderr)
@@ -64,54 +64,54 @@ def ReadRssAndTweet(url):
 		desc = item["description"]
 		h = html2text.HTML2Text()
 		h.ignore_links = True #do not post inline links
-		text = h.handle(desc)
-
-		#Hinweis: die Reihenfolge der folgenden Regeln sollte nicht verändert werden, es sei denn, du weißt was du tust!
-
-		text = text.replace("## Inhaltsverzeichnis","")
-		text = re.sub(r'\n(\s)+', r'\n', text, flags=re.MULTILINE) # keine freien Zeilen auch keine mit Leerzeichen anstatt nur CR
-
-		#keine Formatierungszeichen
-		#vorher:  "###  Montagstreffen (24.07.2017)"
-		#nachher: "Montagstreffen (24.07.2017)"
-		text = re.sub(r'^##+  ', r'', text, flags=re.MULTILINE)
-
-		#vorher:  "  * [1 Montagstreffen (13.11.2017)]"
-		#nachher: "[1 Montagstreffen (13.11.2017)]""
-		text = re.sub(r'^ +\*\s\[', r'[', text, flags=re.MULTILINE)
-
-		#vorher:  "* 1 Montagstreffen (13.11.2017)"
-		#vorher:  "	* 1.1 Borwinschule"
-		#nachher: "1 Montagstreffen (13.11.2017)"
-		#nachher: "1.1 Borwinschule"
-		text = re.sub(r'^ *\*\s(\d)', r'\1', text, flags=re.MULTILINE)
-
-		#vorher:  "  * letzte Verfeinerungen"
-		#nachher: "* letzte Verfeinerungen"
-		text = re.sub(r'^  \* ', r'* ', text, flags=re.MULTILINE)
-
-		text = text.replace("\n\n","\n") #keine freien Zeilen
-
-		''' TODO
-		#suche erstes Bild aus Text
-		#z.B. "(https://wiki.opennet-initiative.de/wiki/Datei:Oni-usb-rs232.jpg)"
-
-		search_resultsphoto = open('/path/to/file/image.jpg', 'rb')
-		response = twitter.upload_media(media=photo)
-		twitter.update_status(status='Checkout this cool image!', media_ids=[response['media_id']])
-		'''
-
+		text = Opennet h.handle(desc)
+		# do Opennet magic...
+    text = CleanupTextOpennet(text)
+		# add start / end to tweet text
 		text = getConfigValue("TweetStart") + " " + text + " " + getConfigValue("TweetEnd")
-
 		#print(text) #for DEBUG
-
-		# Make sure we don't post any dubplicates.
+		# Make sure we don't post any duplicates.
 		if not (IsUrlAlreadyPosted(link)):
 			PostTweet(text, link)
 			MarkUrlAsPosted(link)
 			print("Posted: " + link)
 		else:
 			print("Already posted: " + link)
+
+# Clean up text, Opennet specific
+def CleanupTextOpennet(text):
+  # remove table of contents
+  text = text.replace("## Inhaltsverzeichnis","")
+  # remove empty lines (even with CR)
+  text = re.sub(r'\n(\s)+', r'\n', text, flags=re.MULTILINE)
+  # remove headings
+  # before:  "###  Montagstreffen (24.07.2017)"
+  # after: "Montagstreffen (24.07.2017)"
+  text = re.sub(r'^##+  ', r'', text, flags=re.MULTILINE)
+  # remove numbering
+  # before:  "  * [1 Montagstreffen (13.11.2017)]"
+  # atfer: "[1 Montagstreffen (13.11.2017)]""
+  text = re.sub(r'^ +\*\s\[', r'[', text, flags=re.MULTILINE)
+  # remove lists
+  # before:  "* 1 Montagstreffen (13.11.2017)"
+  # before:  " * 1.1 Borwinschule"
+  # after: "1 Montagstreffen (13.11.2017)"
+  # after: "1.1 Borwinschule"
+  text = re.sub(r'^ *\*\s(\d)', r'\1', text, flags=re.MULTILINE)
+  # remove initial spaces
+  # before:  "  * letzte Verfeinerungen"
+  # after: "* letzte Verfeinerungen"
+  text = re.sub(r'^  \* ', r'* ', text, flags=re.MULTILINE)
+  # remove (other) empty lines
+  text = text.replace("\n\n","\n")
+  ''' TODO
+  #suche erstes Bild aus Text
+  #z.B. "(https://wiki.opennet-initiative.de/wiki/Datei:Oni-usb-rs232.jpg)"
+  search_resultsphoto = open('/path/to/file/image.jpg', 'rb')
+  response = twitter.upload_media(media=photo)
+  twitter.update_status(status='Checkout this cool image!', media_ids=[response['media_id']])
+  '''
+	return(text)	
 
 # Has the URL already been posted?
 def IsUrlAlreadyPosted(url):
