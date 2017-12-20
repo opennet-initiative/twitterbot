@@ -25,7 +25,7 @@ import configparser
 def getConfigValue(key):
 	config = configparser.ConfigParser(interpolation=None)
 	try:
-		config.read("config.ini")
+		config.read("/etc/on-twitterbot.conf")
 		configDict = {
 			"FeedUrl": config['Settings']['FeedUrl'],
 			"TweetStart": config['Settings']['TweetStart'],

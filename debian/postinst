@@ -3,13 +3,15 @@
 set -e
 
 ON_USER=on-twitterbot
-ON_HOME=/var/lib/on-twitterbot
+ON_HOME=/usr/share/on-twitterbot
+ON_LOG=/var/log/on-twitterbot
 
 case "$1" in
     configure)
         if ! getent passwd "$ON_USER" >/dev/null; then
             adduser --quiet --system --home "$ON_HOME" --disabled-password --shell /bin/sh "$ON_USER"
         fi
+				chown "$ON_USER" "$ON_LOG"
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

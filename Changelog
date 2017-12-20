@@ -1,3 +1,12 @@
+Version 1.0.5 - 2017-12-20
+* Improve Debian Packaging
+
+Version 1.0.4 - 2017-12-19
+* Move additional tweet text at start/end to variables in config.ini
+
+Version 1.0.3 - 2017-12-19
+* Improve Debian Packaging
+
 Version 1.0.1 - 2017-12-18
 * Logging changes: write error messages to stderr
 
