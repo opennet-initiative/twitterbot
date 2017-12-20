@@ -1,1 +1,2 @@
 on-twitterbot.py /usr/share/on-twitterbot/
+on-twitterbot.conf /etc/
