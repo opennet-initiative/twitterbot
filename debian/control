@@ -1,7 +1,7 @@
 Source: on-twitterbot
 Section: net
 Priority: optional
-Maintainer: Mathias Mahnke <ap27@opennet-initiative.de>
+Maintainer: Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>
 Standards-Version: 4.0.0
 Homepage: https://opennet-initiative.de/wiki/Twitter
 Vcs-Git: https://dev.opennet-initiative.de/git/on_twitterbot.git
