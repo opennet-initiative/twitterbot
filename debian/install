@@ -1,2 +1,1 @@
-twitterbot.py /usr/share/on-twitterbot/
-config.ini.template /usr/share/on-twitterbot/
+on-twitterbot.py /usr/share/on-twitterbot/
