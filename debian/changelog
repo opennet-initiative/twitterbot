@@ -1,8 +1,8 @@
 on-twitterbot (1.0.6-1) unstable; urgency=medium
 
- * New upstream release.
+  * New upstream release.
 
-  -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Thu, 21 Dec 2017 06:31:00 +010
+ -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Thu, 21 Dec 2017 06:31:00 +010
 
 on-twitterbot (1.0.5-1) unstable; urgency=medium
   
