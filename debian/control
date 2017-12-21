@@ -10,5 +10,6 @@ Vcs-Browser: http://dev.opennet-initiative.de/browser/on_twitterbot
 Package: on-twitterbot
 Architecture: all
 Depends: adduser, python3, python3-feedparser, python3-twython, python3-html2text, ${misc:Depends}
+Build-Depends: debhelper (>= 10)
 Description: Twitterbot for the "Opennet Initiative".
  Provide automatic twitter export function for Opennet Blog.
