@@ -9,7 +9,7 @@ on-twitterbot (1.0.5-1) unstable; urgency=medium
 
 on-twitterbot (1.0.4-1) unstable; urgency=medium
 
-  * Move additional tweet text at start/end to variables in config.ini
+  * New upstream release.
 
  -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Tue, 19 Dec 2017 14:41:00 +0100
 
@@ -28,7 +28,7 @@ on-twitterbot (1.0.2-1) unstable; urgency=medium
 
 on-twitterbot (1.0.1-0) unstable; urgency=medium
   
-  * Improved logging: write error messages to stderr
+  * New upstream release.
 
  -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Mon, 18 Dec 2017 11:07:00 +0100
 
