@@ -1,6 +1,7 @@
 on-twitterbot (1.0.7-1) unstable; urgency=medium
   
   * Move on-twitterbot home to /var/run
+  * Fix cron.d entry
 
  -- Mathias Mahnke (Opennet Initiative e.V.) <ap27@opennet-initiative.de>  Son, 24 Dec 2017 10:53:00 +0100
 
