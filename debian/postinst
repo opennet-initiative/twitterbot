@@ -8,6 +8,7 @@ ON_LOG=/var/log/on-twitterbot
 
 case "$1" in
     configure)
+				chown "$ON_USER" "$ON_HOME"
         if ! getent passwd "$ON_USER" >/dev/null; then
             adduser --quiet --system --home "$ON_HOME" --disabled-password --shell /bin/sh "$ON_USER"
         fi
